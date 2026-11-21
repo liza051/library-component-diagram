@@ -1,0 +1,61 @@
+
+flowchart TB
+    subgraph SYSTEM["LIBRARY RESERVATION SYSTEM"]
+        direction TB
+
+        UI["Reader / Librarian UI"]
+        API["API / Backend"]
+
+        CATALOG["Catalog Service"]
+        RESERVATION["Reservation Service"]
+        LOAN["Loan Service"]
+        NOTIFICATION["Notification Service"]
+
+        DAO["Data Access Layer"]
+        DB[("Library Database")]
+
+        I_API(("API Interface"))
+        I_CATALOG(("Catalog API"))
+        I_RESERVATION(("Reservation API"))
+        I_LOAN(("Loan API"))
+        I_NOTIFICATION(("Notification API"))
+        I_DATA(("Data Access Interface"))
+
+        UI -.->|"Requires"| I_API
+        API ---|"Provides"| I_API
+
+        API -.->|"Requires"| I_CATALOG
+        CATALOG ---|"Provides"| I_CATALOG
+
+        API -.->|"Requires"| I_RESERVATION
+        RESERVATION ---|"Provides"| I_RESERVATION
+
+        API -.->|"Requires"| I_LOAN
+        LOAN ---|"Provides"| I_LOAN
+
+        RESERVATION -.->|"Requires"| I_NOTIFICATION
+        NOTIFICATION ---|"Provides"| I_NOTIFICATION
+
+        CATALOG -.->|"Requires"| I_DATA
+        RESERVATION -.->|"Requires"| I_DATA
+        LOAN -.->|"Requires"| I_DATA
+        DAO ---|"Provides"| I_DATA
+
+        DAO -->|"Database connection"| DB
+    end
+
+    I_EMAIL(("Email Delivery Interface"))
+    EMAIL["External Email Provider"]
+
+    NOTIFICATION -.->|"Requires"| I_EMAIL
+    EMAIL ---|"Provides"| I_EMAIL
+
+    classDef component fill:#e8f0fe,stroke:#3367d6,color:#202124,stroke-width:1.5px
+    classDef interface fill:#fff2cc,stroke:#d6a400,color:#202124,stroke-width:1.5px
+    classDef database fill:#e6f4ea,stroke:#188038,color:#202124,stroke-width:1.5px
+    classDef external fill:#fce8e6,stroke:#c5221f,color:#202124,stroke-width:1.5px
+
+    class UI,API,CATALOG,RESERVATION,LOAN,NOTIFICATION,DAO component
+    class I_API,I_CATALOG,I_RESERVATION,I_LOAN,I_NOTIFICATION,I_DATA interface
+    class DB database
+    class EMAIL external
