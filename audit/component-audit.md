@@ -2,45 +2,45 @@
 
 ## 1. Purpose
 
-The purpose of this audit is to verify the consistency of the software architecture model with the previous models of the Library Reservation System.
+The purpose of this audit is to verify the consistency of the UML Component Diagram with the previous models of the Library Reservation System.
 
-The audit checks component responsibilities, dependencies, interfaces, and the system boundary.
+The audit checks component responsibilities, interfaces, dependencies, external integrations, and the system boundary.
 
 ## 2. Consistency Checks
 
 ### 2.1 Consistency with the ER Data Model (Lab 1)
 
-The architecture includes a Library Database and a Data Access Layer that support the entities defined in the ER model: Reader, Author, Category, Book, BookCopy, Reservation, Loan, and Librarian.
+The ER model defines the main data entities: Reader, Author, Category, Book, BookCopy, Reservation, Loan, and Librarian.
 
-The software components do not replace the data entities. They provide access to and manage the data.
+The component model includes the Library Database and Data Access Layer, which provide storage and controlled access to these entities.
 
 **Result:** Consistent.
 
 ### 2.2 Consistency with Requirements and Use Cases (Lab 2)
 
-The Reservation Service supports the `UC-01: Reserve a Book Copy` use case. It checks the availability of a selected book copy and creates a reservation.
+The Reservation Service supports UC-01: Reserve a Book Copy. It checks the availability of a selected book copy and processes reservation requests.
 
-The Catalog Service provides book and book copy information required by the reservation process.
+The Catalog Service provides book and book copy information required by this use case.
 
 **Result:** Consistent.
 
 ### 2.3 Consistency with Sequence Diagrams (Lab 3)
 
-The architecture includes the Reservation Service and Notification Service, which correspond to the main responsibilities described in the reservation interaction scenarios.
+The sequence diagrams describe interactions between the Reader, Reservation UI, Reservation Service, BookCopy, and Reservation.
 
-The API / Backend component provides an entry point for requests from the user interface.
+The component model assigns these responsibilities to the User Interface, API / Backend, Reservation Service, and Data Access Layer.
+
+The Notification Service supports the confirmation step.
 
 **Result:** Consistent.
 
 ### 2.4 Consistency with the Activity Diagram (Lab 4)
 
-The architecture supports the activities shown in the reservation process:
-- checking book copy availability;
-- creating a reservation;
-- updating reservation-related data;
-- sending a confirmation notification.
+The activity diagram describes checking availability, creating a reservation, updating the book copy status, and sending a confirmation message.
 
-The Notification Service uses an external Email Provider to deliver confirmation messages.
+The component model supports these activities through the Reservation Service, Data Access Layer, and Notification Service.
+
+The external Email Provider delivers the confirmation email. The process does not require the Reader to reply.
 
 **Result:** Consistent.
 
@@ -48,37 +48,40 @@ The Notification Service uses an external Email Provider to deliver confirmation
 
 ### Discrepancy 1: Data Entities vs. Software Components
 
-The ER model describes data entities, while the component diagram describes software modules.
+The ER model defines data entities, while the component diagram defines software components. Their responsibilities are different and must not be confused.
 
-**Resolution:** The Data Access Layer and Library Database were included to show how software components access and store the entities from the ER model.
+**Resolution:** The Library Database stores the ER entities, while the Data Access Layer provides controlled access to the stored data.
 
 ### Discrepancy 2: Reservation Logic Distribution
 
-Previous models describe the reservation process, but they do not fully specify the software architecture responsible for handling requests.
+Previous models describe reservation behavior and interactions but do not define the complete software architecture responsible for processing requests.
 
-**Resolution:** The API / Backend and Reservation Service were included to separate request handling from business logic.
+**Resolution:** The API / Backend handles incoming requests, while the Reservation Service implements reservation-related business logic.
 
 ### Discrepancy 3: Notification Delivery Mechanism
 
-The Activity Diagram shows the Notification Service sending a confirmation to the Reader, while the component model introduces an external Email Provider.
+The Activity Diagram describes sending a confirmation message to the Reader but does not specify the external delivery mechanism.
 
-**Resolution:** The Email Provider was added as an external integration. This clarifies how notifications are delivered without changing the original business process.
+**Resolution:** The Notification Service is responsible for initiating notification delivery through the external Email Provider. The Reader does not need to respond for the reservation process to continue.
 
 ## 4. Interfaces and Dependencies
 
-The diagram identifies provided and required interfaces between the main components.
+The component diagram identifies provided and required interfaces between internal components and the external Email Provider.
 
-The system boundary separates internal components from the external Email Provider.
+The system boundary separates internal components from external services.
 
 The main dependencies are:
+
 - User Interface → API / Backend;
-- API / Backend → business services;
-- Business services → Data Access Layer;
+- API / Backend → Catalog, Reservation, and Loan Services;
+- Reservation Service → Data Access Layer and Notification Service;
+- Catalog Service → Data Access Layer;
+- Loan Service → Data Access Layer;
 - Data Access Layer → Library Database;
-- Notification Service → external Email Provider.
+- Notification Service → External Email Provider.
 
 ## 5. Conclusion
 
 The component diagram is consistent with the previous models of the Library Reservation System.
 
-The identified differences clarify the software architecture and do not contradict the existing requirements, data model, interaction scenarios, or business process.
+The identified differences clarify the distribution of software responsibilities and the external notification mechanism without contradicting the existing requirements, data model, interaction scenarios, or business process.

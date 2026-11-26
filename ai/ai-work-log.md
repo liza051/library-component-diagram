@@ -38,3 +38,14 @@ AI did not act as the source of system requirements or make final architectural 
 Its role was limited to analytical support: identifying gaps, asking clarifying questions, and proposing possible solutions.
 
 The student reviewed the suggestions, decided which ones were appropriate, and remained responsible for the final result.
+
+## 5. Examples of AI-Assisted Work
+
+During this laboratory work, AI assistance was used for the following tasks:
+
+1. Reviewing the component diagram structure and checking whether the main components and interfaces were represented.
+2. Comparing the component specification with the architecture diagram and identifying missing or unclear relationships.
+3. Reviewing the audit and identifying discrepancies between the component model and previous laboratory models.
+4. Improving the documentation to clarify the responsibilities of the Notification Service and the external Email Provider.
+
+The student reviewed the suggestions and decided which changes should be included in the final model.
